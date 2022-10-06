@@ -1,13 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import Router from './App'
+import Router from './App';
+import GlobalStyle from './styles/global';
+import Mock from './mock/index';
+import Home from './pages/Home';
 
-// import App from './App'
-import './index.css'
+
+// Mock.Initialize();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <GlobalStyle/>
     <RouterProvider router={Router} />
   </React.StrictMode>
 )
