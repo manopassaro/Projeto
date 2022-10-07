@@ -5,13 +5,13 @@ const server = `http://localhost:8000/json`;
 interface Game {
     game: string,
     categoria: string,
-    id?: number
+    id: number
 }
 
 
 class services {
 
-    static async getAll (): Promise<Game | null> {
+    static async getAll (): Promise<Game | never> {
         const parseResponse = await fetch(server, {
             method: 'GET'
         });
@@ -22,6 +22,9 @@ class services {
 
     static async create (game: Game) {
         const parseResponse = await fetch(server, {
+            headers:{
+                'Content-Type': 'application/json',
+            },
             method: 'POST',
             body: JSON.stringify(game)
         });
@@ -29,6 +32,17 @@ class services {
 
         return created;
     }
+
+    static async delete (id: number) {
+        const parseResponse = await fetch(`${server}/${id}`, {
+            method: 'DELETE'
+        });
+        const deleted = parseResponse.ok;
+
+        return deleted
+    }
+
+
 }
 
 

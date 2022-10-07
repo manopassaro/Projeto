@@ -7,6 +7,8 @@ import { Row, Column } from '../styles/layouts';
 function Home() {
 
 
+    // LEITURA DOS JOGOS
+
     const [all, setAll] = useState([]);
 
     async function readAll() {
@@ -17,7 +19,44 @@ function Home() {
         readAll()
     }, []);
 
-    console.log(all)
+
+
+    // CRIAÇÃO DOS JOGOS
+
+    const [newList, setNewList] = useState({ });
+
+    async function Create(list: any) {
+        const novaList = Services.create(list);
+        window.location.reload();
+    };
+    const handleCriar = (event: any) => {
+        setNewList({
+            ...newList,
+            [event.target.name]: event.target.value,
+        });
+    };
+    const handleList = () => {
+        const creatList = { ...newList };
+        Create(creatList);
+        setNewList({});
+    };
+
+
+    // DELEÇÃO DE JOGOS
+
+    const [game, setGame] = useState({ 
+        game_id: " ",
+     });
+
+    async function deleteGame (id: number) {
+        const deleted = await Services.delete(id);
+        window.location.reload();
+    }
+
+
+
+
+
 
     return(
         <>
@@ -25,9 +64,24 @@ function Home() {
             <Card>
                 <Row>
                     <Input
-                    placeholder= "Nome do jogo" 
+                    name = "game"
+                    type = "text"
+                    onChange = {handleCriar}
+                    value = {newList.game}
+                    placeholder = "Nome do jogo" 
                     ></Input>
-                    <Button>+</Button>
+                    <select 
+                    name = "categoria"
+                    onChange = {handleCriar}
+                    >
+                        <option>Sem categoria</option>
+                        <option>Corrida</option>
+                        <option>Luta</option>
+                        <option>Tiro</option>
+                    </select>
+                    <Button
+                    onClick = {handleList}
+                    >+</Button>
                 </Row>
             </Card>
 
@@ -35,8 +89,16 @@ function Home() {
             <Card>
                 <h2>Lista de jogos:</h2>
                 {all.map((game, index) => (
-                    <h3 key={index}>{game.game}</h3>
+                    <p key = {index}>{game.game}</p>
                 ))}
+                
+                {all.map((game, index) => (
+                    <Button 
+                    key = {index}
+                    onClick = {() => deleteGame(game.id)}
+                    >Delete</Button>
+                ))}
+                
             </Card>
         
         </>
